@@ -1,18 +1,20 @@
-# README
-## This is the README for your extension "ads-drop-database"
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+# Drop Database Extension
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
+This extension add a Drop Database command to the right-click context menu within the Azure Data Studio database tree.
 
-### For more information
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+After installing this extension simply right-click on any database name and select "Drop Database".
+The database will be removed and the database tree will be refreshed.
 
-# Test
-## Test 2
-### Test 3
+![Menu](menu.png)
 
+## Installation
+---
+The current release is available to download as a .vsix file and can be installed by opening the File Menu and selecting `Install Extension from VSIX Package`
 
-**Enjoy!**
+## Change Log
+---
+See changes here - [Changelog](CHANGELOG.md)
+
+## License
+---
+Licensed under the [MIT](LICENSE.txt) License.
