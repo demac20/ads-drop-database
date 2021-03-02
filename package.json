@@ -2,7 +2,7 @@
 	"name": "ads-drop-database",
 	"displayName": "ADS Drop Database",
 	"description": "Add a Drop Database option to the Right-Click context menu on a database",
-	"publisher": "DMC_Systems",
+	"publisher": "DMCSystems",
 	"version": "0.0.1",
 	"icon": "db_drop.png",
 	"engines": {
