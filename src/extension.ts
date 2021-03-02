@@ -73,18 +73,18 @@ function dropDatabase(connectionProfile?: azdata.IConnectionProfile, dbName?: st
             reject();
         } else {
             azdata.connection.connect(connectionProfile, false, false).then(connectionResult => {
-                azdata.connection.getUriForConnection(connectionResult.connectionId).then(connectionUri => {
+                azdata.connection.getUriForConnection(connectionResult.connectionId).then(ownerUri => {
                     let queryProvider: azdata.QueryProvider = azdata.dataprotocol.getProvider("MSSQL", azdata.DataProviderType.QueryProvider);
                     let query: string = `ALTER DATABASE [${dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [${dbName}]`;
                     
-                    queryProvider.parseSyntax(connectionUri, query).then(result => {
+                    queryProvider.parseSyntax(ownerUri, query).then(result => {
                         if (result.parseable){
-                            queryProvider.runQueryAndReturn(connectionUri, query).then(() => {}, error => {
+                            queryProvider.runQueryAndReturn(ownerUri, query).then(() => {}, error => {
                                 // runQueryAndReturn will always return an error as the above SQL does not return any results
                                 if (error.code === 0) {
                                     // error.code of zero represents a successful execution but no results
                                     let connectionProvider: azdata.ConnectionProvider = azdata.dataprotocol.getProvider("MSSQL", azdata.DataProviderType.ConnectionProvider);
-                                    connectionProvider.disconnect(connectionUri);
+                                    connectionProvider.disconnect(ownerUri);
                                     resolve();
                                 } else {
                                     vscode.window.showErrorMessage("Cannot Drop Database.  Check console for error log.");
