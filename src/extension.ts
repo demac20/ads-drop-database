@@ -75,16 +75,27 @@ function dropDatabase(connectionProfile?: azdata.IConnectionProfile, dbName?: st
             azdata.connection.connect(connectionProfile, false, false).then(connectionResult => {
                 azdata.connection.getUriForConnection(connectionResult.connectionId).then(connectionUri => {
                     let queryProvider: azdata.QueryProvider = azdata.dataprotocol.getProvider("MSSQL", azdata.DataProviderType.QueryProvider);
-
-                    queryProvider.runQueryString(connectionUri, `ALTER DATABASE "${dbName}" SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE "${dbName}"`)
-                    .then(() => {
-                        let connectionProvider: azdata.ConnectionProvider = azdata.dataprotocol.getProvider("MSSQL", azdata.DataProviderType.ConnectionProvider);
-                        connectionProvider.disconnect(connectionUri);
-                        resolve();
-                    }, error => {
-                        vscode.window.showErrorMessage("Cannot Drop Database.  Check console for error log.");
-                        console.error(error);
-                        reject();
+                    let query: string = `ALTER DATABASE [${dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [${dbName}]`;
+                    
+                    queryProvider.parseSyntax(connectionUri, query).then(result => {
+                        if (result.parseable){
+                            queryProvider.runQueryAndReturn(connectionUri, query).then(() => {}, error => {
+                                // runQueryAndReturn will always return an error as the above SQL does not return any results
+                                if (error.code === 0) {
+                                    // error.code of zero represents a successful execution but no results
+                                    let connectionProvider: azdata.ConnectionProvider = azdata.dataprotocol.getProvider("MSSQL", azdata.DataProviderType.ConnectionProvider);
+                                    connectionProvider.disconnect(connectionUri);
+                                    resolve();
+                                } else {
+                                    vscode.window.showErrorMessage("Cannot Drop Database.  Check console for error log.");
+                                    console.error(error);
+                                    reject(error);
+                                }
+                            });
+                        } else {
+                            vscode.window.showErrorMessage(`Parse Error - ${result.errors}`);
+                            reject(result.errors);
+                        }
                     });
                 });
             });

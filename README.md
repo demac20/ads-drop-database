@@ -8,13 +8,13 @@ The database will be removed and the database tree will be refreshed.
 ![Menu](menu.png)
 
 ## Installation
----
+
 The current release is available to download as a .vsix file and can be installed by opening the File Menu and selecting `Install Extension from VSIX Package`
 
 ## Change Log
----
+
 See changes here - [Changelog](CHANGELOG.md)
 
 ## License
----
+
 Licensed under the [MIT](LICENSE.txt) License.
